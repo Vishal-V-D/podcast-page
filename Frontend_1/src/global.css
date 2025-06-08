@@ -1,0 +1,19 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern sans-serif */
+  background: linear-gradient(180deg, #1e272e 0%, #34495e 100%); /* Dark gradient background */
+  color: #ecf0f1; /* Light text color for dark background */
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* Ensure full viewport height */
+}
+
+.bg-white { /* Override Tailwind's white background for components */
+  background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent white for a frosted look */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+}
+
+.shadow-sm { /* Adjust shadow for dark background */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Add more global style overrides as needed */

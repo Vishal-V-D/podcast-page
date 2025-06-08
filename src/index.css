@@ -1,0 +1,91 @@
+@import "tailwindcss";
+<<<<<<< HEAD
+=======
+/* Add these to your global CSS file, e.g., src/index.css */
+
+/* Keyframes for the sparkle animation */
+@keyframes sparkle-float {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0; }
+  25% { transform: translate(var(--x-offset-1), var(--y-offset-1)) scale(1.1) rotate(45deg); opacity: 0.8; }
+  50% { transform: translate(var(--x-offset-2), var(--y-offset-2)) scale(1) rotate(90deg); opacity: 0.5; }
+  75% { transform: translate(var(--x-offset-3), var(--y-offset-3)) scale(0.9) rotate(135deg); opacity: 0.7; }
+  100% { transform: translate(0, 0) scale(1) rotate(180deg); opacity: 0; }
+}
+
+/* Base class for sparkle animation */
+.animate-sparkle {
+  animation: sparkle-float var(--animation-duration, 15s) ease-in-out infinite;
+  /* Define custom properties for random offsets directly in JS,
+     or you can pre-define a few sets in CSS for simple variation */
+  --x-offset-1: 10px; --y-offset-1: 15px;
+  --x-offset-2: -15px; --y-offset-2: 5px;
+  --x-offset-3: 5px; --y-offset-3: -10px;
+}
+
+/* Ensure these existing animations are also present as they are used */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 1; transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes bounce-h {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+@keyframes spin-once {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Utility classes for animations */
+.animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+.animate-fade-in-down { animation: fadeInDown 0.8s ease-out forwards; }
+.animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+.animate-bounce-in { animation: bounceIn 0.8s ease-out forwards; }
+.animate-shake { animation: shake 0.5s ease-in-out; }
+
+/* Group hover animations */
+.group:hover .group-hover\:animate-bounce-h {
+  animation: bounce-h 0.6s ease-in-out infinite;
+}
+.group:hover .group-hover\:animate-spin-once {
+  animation: spin-once 0.8s ease-out;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
+
+/* Ensure responsive text and elements by using Tailwind's default prefixes
+   like `sm:`, `md:`, `lg:` for text sizes, padding, margin, etc. */
+   
+>>>>>>> 44625a2 (new)

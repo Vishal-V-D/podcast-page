@@ -1,0 +1,5 @@
+body {
+  background-image: linear-gradient(to bottom right, #000080, #800080); /* Example: Navy to Purple */
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* To make the gradient cover the whole viewport */
+}

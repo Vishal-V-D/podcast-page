@@ -1,6 +1,4 @@
 @import "tailwindcss";
-<<<<<<< HEAD
-=======
 /* Add these to your global CSS file, e.g., src/index.css */
 
 /* Keyframes for the sparkle animation */
@@ -88,4 +86,3 @@
 /* Ensure responsive text and elements by using Tailwind's default prefixes
    like `sm:`, `md:`, `lg:` for text sizes, padding, margin, etc. */
    
->>>>>>> 44625a2 (new)

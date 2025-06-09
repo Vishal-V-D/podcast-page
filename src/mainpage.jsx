@@ -29,6 +29,24 @@ const Mainpage = () => {
   // Define the backend URL here as a single variable
   // IMPORTANT: Remember to update this with your active ngrok URL or deployment URL!
   const BACKEND_URL = "http://127.0.0.1:5050";
+  const notificationIdRef = useRef(0); // For unique notification IDs
+  const [notifications, setNotifications] = useState([]); // State for notifications
+
+  const addNotification = (message, type = 'info', duration = 5000) => {
+    const newNotification = {
+      id: notificationIdRef.current++,
+      message,
+      type,
+      duration,
+    };
+    setNotifications((prev) => [...prev, newNotification]);
+
+    if (duration > 0) {
+      setTimeout(() => {
+        setNotifications((prev) => prev.filter((n) => n.id !== newNotification.id));
+      }, duration);
+    }
+  };
 
   // State variables for inputs, transcription, generated content, and UI states
   const [audioFile, setAudioFile] = useState(null);
@@ -56,7 +74,8 @@ const Mainpage = () => {
 
   // Derived state for actual desktop sidebar expansion
   const isSidebarExpanded = isSidebarLockedOpen || (isSidebarHovered && !isSidebarLockedOpen); //
-
+const [newsletterPostLoading, setNewsletterPostLoading] = useState(false);
+  const [newsletterPostMessage, setNewsletterPostMessage] = useState('');
   // State for granular content generation options
   const [contentSettings, setContentSettings] = useState({
     all: { targetWordCount: 500, tone: 'Professional', focusKeywords: '' },
@@ -334,6 +353,45 @@ const saveNewGeneration = async (user, generatedContent, transcribedText) => {
     alert("Logged out successfully!");
   };
 
+const handlePostNewsletter = async (newsletterContent) => {
+  setNewsletterPostLoading(true); // Use newsletter-specific loading state
+  setNewsletterPostMessage(''); // Clear previous message
+
+  try {
+    // Use backticks for template literal
+    const response = await fetch(`${BACKEND_URL}/api/post-newsletter`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        content: newsletterContent,
+        title: 'Latest Newsletter from Your AI Agent', // Customize or extract from content
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setNewsletterPostMessage(data.message || 'Newsletter posted successfully!');
+      addNotification(data.message || 'Newsletter posted successfully!', 'success');
+      console.log("Newsletter post response:", data);
+      // Optionally clear the newsletter content or mark it as 'sent'
+      // setGeneratedContent(prevContent => ({ ...prevContent, newsletter: '' }));
+    } else {
+      setNewsletterPostMessage(data.error || 'Failed to post newsletter');
+      addNotification(data.error || 'Failed to post newsletter', 'error');
+      console.error(`Error posting newsletter: ${data.error || 'Unknown error'}`);
+    }
+  } catch (err) {
+    console.error('Error posting newsletter:', err);
+    setNewsletterPostMessage('Network error or server unreachable during newsletter post.');
+    addNotification('Network error or server unreachable during newsletter post.', 'error');
+  } finally {
+    setNewsletterPostLoading(false); // End newsletter-specific loading state
+  }
+};
+
   return (
     <div className="min-h-screen bg-gradient-to-l from-white to--50 font-inter text-gray-800">
       {/* Mobile Menu Button - visible only on small screens */}
@@ -511,6 +569,10 @@ const saveNewGeneration = async (user, generatedContent, transcribedText) => {
                 onCopy={copyToClipboard}
                 copiedSection={copiedSection}
                 onSave={handleSaveEditedContent}
+                onPost={handlePostNewsletter} // <-- Pass handlePostNewsletter to GeneratedContentOverview
+                isLoading={newsletterPostLoading} // <-- Pass newsletterPostLoading to GeneratedContentOverview
+                message={newsletterPostMessage} // <-- Pass newsletterPostMessage to GeneratedContentOverview
+                
               />
             )}
 
@@ -563,7 +625,15 @@ const saveNewGeneration = async (user, generatedContent, transcribedText) => {
                   <LinkedInDisplay content={generatedContent.linkedin} onCopy={copyToClipboard} copiedSection={copiedSection} onSave={handleSaveEditedContent} linkedinImage={generatedContent.linkedinImage} />
                 )}
                 {activeTab === 'newsletter' && generatedContent.newsletter && (
-                  <NewsletterDisplay content={generatedContent.newsletter} onCopy={copyToClipboard} copiedSection={copiedSection} onSave={handleSaveEditedContent} />
+                  <NewsletterDisplay
+                    content={generatedContent.newsletter}
+                    onCopy={copyToClipboard}
+                    copiedSection={copiedSection}
+                    onSave={handleSaveEditedContent}
+                    onPost={handlePostNewsletter} // Pass the new post function
+                    isLoading={newsletterPostLoading} // Pass newsletter-specific loading state
+                    message={newsletterPostMessage}   // Pass newsletter-specific message state
+                  />
                 )}
                 {activeTab === 'twitter' && generatedContent.twitter && (
                   <TwitterDisplay content={generatedContent.twitter} onCopy={copyToClipboard} copiedSection={copiedSection} onSave={handleSaveEditedContent} twitterImage={generatedContent.twitterImage} />

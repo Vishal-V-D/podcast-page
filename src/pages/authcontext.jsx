@@ -44,7 +44,7 @@ export function AuthProvider({ children }) {
       if (userData.approved === true && userData.status === 'approved') {
         setPendingApproval(false);
         return true;
-      } else if (userData.approved === false || userData.status === 'revoked') {
+      } else if (userData.approved === false && userData.status === 'revoked') {
         setPendingApproval(true);
         return false;
       } else {
@@ -119,10 +119,10 @@ export function AuthProvider({ children }) {
         setCurrentUser(null);
       } else {
         const data = userDoc.data();
-        if (data.approved === true || data.status === 'approved') {
+        if (data.approved === true && data.status === 'approved') {
           setPendingApproval(false);
           setCurrentUser(user);
-        } else if (data.approved === false || data.status !== 'approved') {
+        } else if (data.approved === false && data.status !== 'approved') {
           setPendingApproval(true);
           setCurrentUser(null);
         } else {
